@@ -183,6 +183,7 @@ plangular.directive('plangular', ['$http', 'plangularConfig', function ($http, p
             }, 
             permalink_url: data.short_url, 
             waveform_url: null, 
+            artwork_url: 'https://s3.amazonaws.com/s3.blend.io/user/img/'+data.user.id+'.jpg', 
             stream_url: data.preview.url, 
             playback_count: data.plays, 
             download_count: null,

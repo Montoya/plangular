@@ -890,6 +890,7 @@ var Plangular = Vue.extend({
             }, 
             permalink_url: response.short_url, 
             waveform_url: null, 
+            artwork_url: 'https://s3.amazonaws.com/s3.blend.io/user/img/'+data.user.id+'.jpg', 
             stream_url: response.preview.url, 
             playback_count: response.plays, 
             download_count: null,
