@@ -79,6 +79,49 @@ var Plangular = Vue.extend({
         self.vm.duration = plangular.data[value].duration / 1000;
         self.vm.track = plangular.data[value];
         player.load(plangular.data[value], self.vm.index);
+      } else if (value.indexOf('blend.io') > -1) { 
+        /* adding support for Blend.io projects */ 
+        
+        // extract project ID from Blend URL 
+        var blend_project_id = value.replace(/http[s]+\:\/\/blend\.io\/project\//,''); 
+        
+        var blend_url = 'https://blend.io/api/project/'+blend_project_id+'.json'; 
+        
+        apiUrl = blend_url; 
+        
+        jsonp(apiUrl, function(error, response) {
+          
+          response = {
+            kind:'track', 
+            id: response['_id'], 
+            title: response.name, 
+            duration: 'n/a', 
+            state: response.state, 
+            description: response.desc, 
+            bpm: response.bpm, 
+            uri: response.short_url, 
+            user: {
+              id: response.user.id, 
+              kind: 'user', 
+              username: response.user.name
+            }, 
+            permalink_url: response.short_url, 
+            waveform_url: null, 
+            stream_url: response.preview.url, 
+            playback_count: response.plays, 
+            download_count: null,
+            favoritings_count: response.likes.length, 
+            comment_count: null  
+          };
+          
+          plangular.data[value] = response;
+          for (var key in response) {
+            self.vm.$data[key] = response[key];
+          }
+          self.vm.duration = response.duration / 1000;
+          self.vm.track = plangular.data[value];
+          player.load(plangular.data[value], self.vm.index);
+        }); 
       } else {
         jsonp(apiUrl, function(error, response) {
           plangular.data[value] = response;

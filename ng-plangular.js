@@ -156,6 +156,45 @@ plangular.directive('plangular', ['$http', 'plangularConfig', function ($http, p
       } else if (player.data[src]) {
         scope.track = player.data[src];
         addKeys(scope.track);
+      } else if (src.indexOf('blend.io') > -1) { 
+        /* adding support for Blend.io projects */
+        
+        // extract project ID from Blend URL 
+        var blend_project_id = src.replace(/http[s]+\:\/\/blend\.io\/project\//,''); 
+        
+        params.url = 'https://blend.io/api/project/'+blend_project_id+'.json'; 
+        
+        // form a request to Blend api
+        $http.jsonp(params.url, { params: params }).success(function(data){
+          // need to transform `data` to have same key names as soundcloud response  
+          data = {
+            kind:'track', 
+            id: data['_id'], 
+            title: data.name, 
+            duration: 'n/a', 
+            state: data.state, 
+            description: data.desc, 
+            bpm: data.bpm, 
+            uri: data.short_url, 
+            user: {
+              id: data.user.id, 
+              kind: 'user', 
+              username: data.user.name
+            }, 
+            permalink_url: data.short_url, 
+            waveform_url: null, 
+            stream_url: data.preview.url, 
+            playback_count: data.plays, 
+            download_count: null,
+            favoritings_count: data.likes.length, 
+            comment_count: null  
+          }; 
+          console.log(data); 
+          scope.track = data;
+          addKeys(scope.track);
+          player.data[src] = data;
+          player.load(data, scope.index);
+        }); 
       } else {
         $http.jsonp('//api.soundcloud.com/resolve.json', { params: params }).success(function(data){
           scope.track = data;
@@ -288,7 +327,6 @@ plangular.provider('plangularConfig', function() {
     };
   };
 });
-
 
 })();
 

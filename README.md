@@ -1,6 +1,6 @@
 # Plangular
 
-Create custom SoundCloud players with HTML and CSS.
+Create custom SoundCloud and Blend players with HTML and CSS.
 
 http://jxnblk.github.io/plangular
 
@@ -336,6 +336,10 @@ According to the SoundCloud API terms you must:
 
 Read more here: http://developers.soundcloud.com/docs/api/terms-of-use#branding
 
+### Using the Blend API
+
+No public documentation yet, but passing a public URL to any Blend project will work
+
 ### Troubleshooting
 
 SoundCloud provides an option for users to prevent streaming to third-party apps.
@@ -357,6 +361,7 @@ If it's set to false, there is no way to play that sound with the API.
 - Cleaned up player object
 - `currentTime` and `duration` for track or globally on the player object
 - `plangular-icon` must be used on an svg element
+- Support for public projects on Blend.io 
 
 
 ---
